@@ -1,0 +1,38 @@
+pkg main;
+
+(*Foo)::Foo() {
+	
+}
+
+type struct: Node {
+	var data: pub int;
+	var next: *Node;  
+};
+
+(n Node)::Next() *Node {
+	return n.next;
+}
+
+(n *Node)::Attach(node *Node) {
+	n.Next = node;
+}
+
+func main() {
+	var root: *Node = &Node {
+		data:  10;
+	}
+	var new: *Node = &Node {
+		data: 20;
+	}
+
+	root.Attach(new);
+
+	if (root.Next == nil) {
+		root.Attach(root)
+	}
+
+	for (var i: *Node = root; i.Next() != nil; i = i.Next()) {
+		print(i.data)
+	}
+
+}
