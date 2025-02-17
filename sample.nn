@@ -1,9 +1,5 @@
 pkg main;
 
-(*Foo)::Foo() {
-	
-}
-
 type struct: Node {
 	var data: pub int;
 	var next: *Node;  

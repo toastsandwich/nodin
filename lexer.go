@@ -36,7 +36,7 @@ func (t Token) String() string {
 var (
 	Delimiter = map[string]struct{}{";": {}}
 
-	Operator = map[string]struct{}{
+	Operators = map[string]struct{}{
 		"+": {}, "-": {}, "*": {}, "/": {}, "%": {}, "++": {}, "--": {}, // arithmatic operators
 
 		"==": {}, "!=": {}, ">=": {}, "<=": {}, ">": {}, "<": {}, // comparision operators
@@ -50,7 +50,7 @@ var (
 		"::": {}, "...": {}, ".": {}, ":": {}, // specials
 	}
 
-	Keyword = map[string]struct{}{
+	Keywords = map[string]struct{}{
 		"pkg":       {},
 		"pub":       {},
 		"type":      {},
@@ -177,9 +177,9 @@ func (l *Lexer) ReadToken() *Token {
 	}
 
 	op := string(l.Read())
-	if _, ok := Operator[op]; ok {
+	if _, ok := Operators[op]; ok {
 		nxt := string(l.ReadNext())
-		if _, ok := Operator[op+nxt]; ok {
+		if _, ok := Operators[op+nxt]; ok {
 			op += nxt
 			l.Advance()
 		}
@@ -200,7 +200,7 @@ func (l *Lexer) ReadToken() *Token {
 	}
 	if unicode.IsLetter(rune(l.Read())) {
 		str := l.readString()
-		if _, ok := Keyword[str]; ok {
+		if _, ok := Keywords[str]; ok {
 			return &Token{
 				Type:  KWRD,
 				Value: str,
