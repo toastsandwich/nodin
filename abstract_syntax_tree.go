@@ -39,18 +39,18 @@ func (d *Declaration) Accept(s StatementVisitor) any {
 
 type If struct {
 	Condition Expression
-	Block     Block
+	Block     *Block
 }
 
 func (i *If) Accept(s StatementVisitor) any {
-	return s.VisitIf(i)
+	return s.WithIndent(i)
 }
 
 type For struct {
 	Init      Statement
 	Condition Expression
 	Update    Expression
-	Block     Block
+	Block     *Block
 }
 
 func (f *For) Accept(s StatementVisitor) any {
