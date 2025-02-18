@@ -1,0 +1,10 @@
+pkg main;
+
+func main() {
+	var a: int = 100;
+	var b: bool = true;
+	var s: str = "Hello Shreyas";
+	var d: float = 543.13;
+	var slc: []int = []int{1, 2, 3, 4, 5, 6};
+	var a1: *int = &a;
+}

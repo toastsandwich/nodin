@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"unicode"
 )
 
@@ -10,6 +11,7 @@ type TokenType string
 const (
 	EOF  = "EOF" // end of file
 	WSPC = "WHITE SPACE"
+	FLTL = "FLOAT LITERAL"
 	INTL = "INTEGER LITERAL"
 	STRL = "STRING LITERAL"
 	KWRD = "KEYWORD"
@@ -143,6 +145,13 @@ func (l *Lexer) ReadToken() *Token {
 		return &Token{
 			Type: EOF,
 		}
+	case '"':
+		l.Advance()
+		return &Token{
+			Type:  STRL,
+			Value: l.readStringLiteral(),
+			Line:  l.Line,
+		}
 	case ';':
 		return &Token{
 			Type:  DLMT,
@@ -192,6 +201,13 @@ func (l *Lexer) ReadToken() *Token {
 
 	if unicode.IsDigit(rune(l.Read())) {
 		num := l.readDigit()
+		if strings.Contains(num, ".") {
+			return &Token{
+				Type:  FLTL,
+				Value: num,
+				Line:  l.Line,
+			}
+		}
 		return &Token{
 			Type:  INTL,
 			Value: num,
@@ -208,7 +224,7 @@ func (l *Lexer) ReadToken() *Token {
 			}
 		}
 		return &Token{
-			Type:  STRL,
+			Type:  IDNT,
 			Value: str,
 			Line:  l.Line,
 		}
@@ -236,5 +252,23 @@ func (l *Lexer) readDigit() string {
 		l.Advance()
 		dgt = append(dgt, l.Read())
 	}
+	if l.ReadNext() == '.' {
+		l.Advance()
+		dgt = append(dgt, '.')
+		for unicode.IsDigit(rune(l.ReadNext())) {
+			l.Advance()
+			dgt = append(dgt, l.Read())
+		}
+	}
 	return string(dgt)
+}
+
+func (l *Lexer) readStringLiteral() string {
+	str := []byte{}
+	for l.Read() != '"' && l.Read() != 0 {
+		str = append(str, l.Read())
+		l.Advance()
+	}
+	l.Advance()
+	return string(str)
 }

@@ -5,7 +5,7 @@
 ```
 pkg node;
 
-pub type: struct node {
+pub type struct: Node {
 	data: pub int;
 	next: *node;
 

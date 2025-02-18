@@ -1,9 +1,9 @@
 pkg main;
 
-type struct: Node {
-	var data: pub int;
-	var next: *Node;  
-};
+type Node: struct {
+	data: pub i32;
+	next: *Node;
+}
 
 (n Node)::Next() *Node {
 	return n.next;
@@ -30,5 +30,7 @@ func main() {
 	for (var i: *Node = root; i.Next() != nil; i = i.Next()) {
 		print(i.data)
 	}
+
+	var str: string = "Hello World";
 
 }
