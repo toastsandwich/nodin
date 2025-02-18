@@ -36,7 +36,7 @@ func (t Token) String() string {
 }
 
 var (
-	Delimiter = map[string]struct{}{";": {}}
+	Delimiter = map[string]struct{}{";": {}, ":": {}}
 
 	Operators = map[string]struct{}{
 		"+": {}, "-": {}, "*": {}, "/": {}, "%": {}, "++": {}, "--": {}, // arithmatic operators
@@ -69,8 +69,10 @@ var (
 
 		"int": {}, "i8": {}, "i16": {}, "i32": {}, "i64": {},
 
-		"unint": {}, "u8": {}, "u16": {}, "u32": {}, "u64": {},
+		"uint": {}, "u8": {}, "u16": {}, "u32": {}, "u64": {},
+
 		"byte": {},
+
 		"rune": {},
 
 		"f32": {}, "f64": {},
@@ -190,6 +192,13 @@ func (l *Lexer) ReadToken() *Token {
 		nxt := string(l.ReadNext())
 		if _, ok := Operators[op+nxt]; ok {
 			op += nxt
+			if l.Next+1 < len(l.Input) {
+				nxtt := string(l.Input[l.Next+1])
+				if _, ok := Operators[op+nxtt]; ok {
+					op += nxtt
+					l.Advance()
+				}
+			}
 			l.Advance()
 		}
 		return &Token{
