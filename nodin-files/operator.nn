@@ -1,0 +1,7 @@
+pkg r1d2;
+
+func main() {
+	var i: int = 1 << 16;
+	var j: int = 1;
+	j <<= i;
+}

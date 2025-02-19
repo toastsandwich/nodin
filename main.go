@@ -16,18 +16,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	l := NewLexer(string(codeFile))
-	for {
-		tok := l.ReadToken()
-		if tok.Type == "WHSPC" {
-			continue
-		}
-		fmt.Println(tok.String())
-		if tok.Type == EOF {
-			break
-		}
-	}
-
-	// gen := NewGenerator()
-
+	cmplr := &Compiler{}
+	cmplr.Compile(string(codeFile))
 }

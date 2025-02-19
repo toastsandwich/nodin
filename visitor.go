@@ -11,6 +11,7 @@ type StatementVisitor interface {
 	VisitIf(*If) any
 	VisitFor(*For) any
 	VisitKeyword(*Keyword) any
+	VisitPackage(*Package) any
 	WithIndent(any) any
 }
 
@@ -54,6 +55,8 @@ func (g *Generator) Visit(comp any) any {
 		return g.VisitFor(c)
 	case *Keyword:
 		return g.VisitKeyword(c)
+	case *Package:
+		return g.VisitPackage(c)
 	case *UnaryExpression:
 		return g.VisitUnaryExpression(c)
 	case *BinaryExpression:
@@ -63,6 +66,10 @@ func (g *Generator) Visit(comp any) any {
 	default:
 		return "not found"
 	}
+}
+
+func (g *Generator) VisitPackage(p *Package) any {
+	return fmt.Sprintf("package %s", p.Value.Value)
 }
 
 func (g *Generator) VisitBlock(b *Block) any {

@@ -83,3 +83,11 @@ type BinaryExpression struct {
 func (b *BinaryExpression) Accept(e ExpressionVisitor) any {
 	return e.VisitBinaryExpression(b)
 }
+
+type Package struct {
+	Value *Identifier
+}
+
+func (p *Package) Accept(s StatementVisitor) any {
+	return s.VisitPackage(p)
+}

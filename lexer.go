@@ -36,7 +36,7 @@ func (t Token) String() string {
 }
 
 var (
-	Delimiter = map[string]struct{}{";": {}, ":": {}}
+	Delimiter = map[string]struct{}{";": {}, ":": {}, ",": {}}
 
 	Operators = map[string]struct{}{
 		"+": {}, "-": {}, "*": {}, "/": {}, "%": {}, "++": {}, "--": {}, // arithmatic operators
@@ -131,15 +131,11 @@ func (l *Lexer) Advance() {
 
 func (l *Lexer) ReadToken() *Token {
 	defer l.Advance()
-	if unicode.IsSpace(rune(l.Read())) {
+	for unicode.IsSpace(rune(l.Read())) {
 		if l.Read() == '\n' {
 			l.Line++
 		}
-		return &Token{
-			Type:  "WHSPC",
-			Value: "White Space",
-			Line:  l.Line,
-		}
+		l.Advance()
 	}
 
 	switch l.Read() {
@@ -248,7 +244,7 @@ func (l *Lexer) ReadToken() *Token {
 
 func (l *Lexer) readString() string {
 	str := []byte{l.Read()}
-	for unicode.IsLetter(rune(l.ReadNext())) {
+	for unicode.IsLetter(rune(l.ReadNext())) || unicode.IsDigit(rune(l.ReadNext())) {
 		l.Advance()
 		str = append(str, l.Read())
 	}
